@@ -1,26 +1,17 @@
 """task 1
 """
-#import glob
-#mpl.use('TkAgg')
-#import matplotlib.pyplot as mpl
-import os
+import matplotlib.pyplot as mpl
 from PIL import Image
 
-#TARGET_FOLDER = "~Desktop/code/\"Course_repo\"/Webcam/shot"
-
-PATH = os.path.join(os.path.expanduser("~"), "Desktop", "code", "course_repo", "Webcam")
-print PATH
-
-# For summing REdness and GReenness in a pictuRE
-#sum_red = 0
-#sum_green = 0
+PATH = "Webcam/"
+#print PATH
 
 # For storing sums of the colors
 GR = []
 RE = []
 
 # open each image in turn
-for i in range(1, 7):
+for i in range(1, 8):
     kuv = Image.open(PATH + "shot" + str(i) + ".jpg")
 
 	# get width and height of image
@@ -46,10 +37,10 @@ for i in range(1, 7):
     print "red: and green:"
     print sum_red, sum_green
 
-#	matplotlib.plot(range(1,8), sum_green, range(1,8), sum_red)
-
-#mpl.ylabel('Color intensity')
-#mpl.xlabel('Image')
-#mpl.show()
-for i in RE:
-    print i
+#if len(RE) == len(GR):
+#    DIM = range(1, 8)
+mpl.plot(RE, GR, 'ro')
+mpl.xlabel('Redness')
+mpl.ylabel('Greenness')
+#mpl.xlim([0.5, 7.5])
+mpl.show()
