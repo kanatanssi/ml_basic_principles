@@ -1,50 +1,55 @@
-from PIL import Image as img
-#from __future__ import print_function
-import glob
-import matplotlib as mpl
-mpl.use('TkAgg')
-import matplotlib.pyplot as plt
+"""task 1
+"""
+#import glob
+#mpl.use('TkAgg')
+#import matplotlib.pyplot as mpl
+import os
+from PIL import Image
 
-target_folder = "webcam/*.jpg"
-sum_red = 0
-sum_green = 0
-#sums = []
+#TARGET_FOLDER = "~Desktop/code/\"Course_repo\"/Webcam/shot"
 
-# gather all images in target folder into a list
-kuv_list = []
+PATH = os.path.join(os.path.expanduser("~"), "Desktop", "code", "course_repo", "Webcam")
+print PATH
 
-for filename in glob.glob(target_folder):
+# For summing REdness and GReenness in a pictuRE
+#sum_red = 0
+#sum_green = 0
 
-	kuv = img.open(filename)
+# For storing sums of the colors
+GR = []
+RE = []
+
+# open each image in turn
+for i in range(1, 7):
+    kuv = Image.open(PATH + "shot" + str(i) + ".jpg")
 
 	# get width and height of image
-	width, height = kuv.size
+    width, height = kuv.size
+	#print(width, height) #For debugging
 
-	#print(width, height)
-	
-	sum_red = 0
-	sum_green = 0
-	sums_both = []
+	# Set sums to 0 at the begigning of an iteration
+    sum_red = 0
+    sum_green = 0
 
 	# loop through each pixel in image
-#	for w_px in width:
-	for w_px in range(0, width):
-#		for h_px in height:
-		for h_px in range(0, height):
+    for w_px in range(0, width):
+        for h_px in range(0, height):
 			# get colors of each pixel
-			r, g, b, = kuv.getpixel((w_px, h_px))
+            r, g, b, = kuv.getpixel((w_px, h_px))
 #			print(r, g)
-			sum_red += r
-			sum_green += g
-	
-	print("pixel color sums:")
-	print("red: and green:")
-	print([sum_red, sum_green])
-	sums_both.append([sum_red, sum_green])
+            sum_red += r
+            sum_green += g
 
+    RE.append(sum_red)
+    GR.append(sum_green)
+    print "pixel color sums:"
+    print "red: and green:"
+    print sum_red, sum_green
 
 #	matplotlib.plot(range(1,8), sum_green, range(1,8), sum_red)
 
-mpl.ylabel('Color intensity')
-mpl.xlabel('Image')
-mpl.show()
+#mpl.ylabel('Color intensity')
+#mpl.xlabel('Image')
+#mpl.show()
+for i in RE:
+    print i
