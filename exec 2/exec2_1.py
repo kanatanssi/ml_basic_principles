@@ -26,10 +26,7 @@ def read_images(path, name):
     return imgs
 
 # Minutes from 07:00 for the images (visible on each image)
-#MINUTES = [211, 271, 121, 31, 341, 401, 241, 181, 301, 301]
 MINUTES = [211, 271, 121, 31, 341, 401, 241, 181, 301, 301]
-# Images in a list
-#IMGS = read_images(FILENAME, FILEPATH)
 
 # For storing greenness
 GR = []
@@ -67,17 +64,95 @@ for i in range(1, 11):
 #    print "Greenness for MontBlanc" + str(printingvar)+ ".png: " + str(g)
 #    printingvar = printingvar + 1
 
-#X = np.matrix([1 for i in range(0, 10)])
-#X = np.vstack([X, GR])
-#Y = np.matrix(MINUTES)
+X = np.matrix([1 for i in range(0, 10)])
+X = np.vstack([X, GR])
+Y = np.matrix(MINUTES)
 #print (X, '\n', Y)
-#W = (X * X.transpose()).I * X * Y.transpose()
+W = (X * X.transpose()).I * X * Y.transpose()
 #print W
 
-fit = np.polyfit(GR, MINUTES, 1)
-fn_fit = np.poly1d(fit)
+# Linear reg func
+#fit = np.polyfit(GR, MINUTES, 1)
+#fn_fit = np.poly1d(fit)
 
-mpl.plot(GR, MINUTES, 'ro', GR, fn_fit(GR), 'k')
-mpl.xlabel('Greenness')
-mpl.ylabel('Minutes')
+#mpl.plot(GR, MINUTES, 'ro', GR, fn_fit(GR), 'k')
+#mpl.xlabel('Greenness')
+#mpl.ylabel('Minutes')
+#mpl.show()
+
+"""ASS2
+"""
+# a function for counting mean square error
+# N - number of items to compare (images)
+# y - labels
+# h - hypotheses
+def mean_sq_error(N, y, h):
+    er = 0
+    for i in range(0, N):
+        er += (y[i] - h[i])*(y[i] - h[i])
+    er /= N
+    return er
+
+
+hx = []
+wa = W.item(0)
+wb = W.item(1)
+# count time with W
+for g in GR:
+    h = wb * g + wa
+    hx.append(h)
+
+# count error:
+error = mean_sq_error(10, MINUTES, hx)
+print "Mean squared error: " + str(error)
+
+#def rmse(predictions, targets):
+#    return np.sqrt(((predictions - targets) ** 2).mean())
+
+#error = rmse(hx, Y)
+#print "Root mean squared error: " + str(error)
+
+"""ASS3
+"""
+
+# new weights
+X = np.matrix([1 for i in range(0, 10)])
+X = np.vstack([X, GR])
+Y = np.matrix(MINUTES)
+#print (X, '\n',  Y)
+W32 = (X * X.transpose() + 10 * 2 * np.identity(2)).I * X * Y.transpose()
+W35 = (X * X.transpose() + 10 * 5 * np.identity(2)).I * X * Y.transpose()
+
+"""ASS4
+"""
+
+# OBS: 4 for problem number, 2 and 5 for lambda
+hx42 = []
+hx45 = []
+wa42 = W32.item(0)
+wb42 = W32.item(1)
+wa45 = W35.item(0)
+wb45 = W35.item(1)
+
+
+# count times with W32 and W35
+for x in GR:
+    h42 = wb42 * x + wa42
+    h45 = wb45 * x + wa45
+    hx42.append(h42)
+    hx45.append(h45)
+
+#line_down, = plt.plot([3,2,1], label='Line 1')
+#plt.legend(handles=[line_up, line_down])
+data_points, = mpl.plot(GR, MINUTES, 'ro', label="Data points")
+linear_reg, = mpl.plot(GR, hx, '-r', label="Linear regression")
+lam2, = mpl.plot(GR, hx42, '-m', label="Lamda2")
+lam5, = mpl.plot(GR, hx45, '-g', label="Lamda5")
+#data_points, = mpl.plot(GR, MINUTES, 'ro', label="Data points")
+#mpl.plot(GR, MINUTES, 'ro', GR, hx, '-r', GR, hx42, '-m', GR, hx45, '-g')
+mpl.ylabel("Minutes")
+mpl.xlabel("Greenness")
+#mpl.legend([MINUTES, hx, hx42, hx45],["Data points","Linear regression","Lamda 2","Lamda 5"])
+#mpl.legend(handles=["Data points","Linear regression","Lamda 2","Lamda 5"])
+mpl.legend(handles=[data_points, linear_reg, lam2, lam5])
 mpl.show()
