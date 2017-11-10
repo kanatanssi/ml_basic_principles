@@ -1,0 +1,29 @@
+Three Random Variables
+
+Simply looking at the image one could assume that if the property C is present,
+then the item will not have property B and if property C is present,
+property A is also likely to be present.
+
+The solution can be discovered via Conditional Probability.
+In case two variables A and B are not independent
+(ie. the occurence of one does not affect the other 
+(in which case the probability that both variables are true is simply the probability of B)),
+the probability that both occur is defined by the following formula:
+P(B|A) = P(A ∩ B) / P(A).
+
+From this definition, the conditional probability P(B|A) is obtained by dividing by P(A).
+The formula assumes that the probability of A is > 0,
+which it is in the provided set in the assignment.
+
+Using the following notation:
+- Ap: A=1 item has property A
+- Bp: B=1 item has property B
+- Cp: C=1 item has property C
+
+And using the formula introduced above, we may obtain that P(B = 1|C = 1) = P(Bp|Cp) = 0/0.5 = 0
+and P(A = 1|C = 1) = P(Ap|Cp) = 0.5/0.5 = 1.
+This proves what could already be assumed by simply looking at the provided set,
+if an item has property B, C is sure not to be present and if an item has property C,
+then A is also present.
+
+Based on the above, both predictions are possible based on the provided set.
