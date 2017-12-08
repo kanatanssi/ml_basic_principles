@@ -1,0 +1,171 @@
+\documentclass[article,11pt]{article}
+\usepackage{fullpage}
+\usepackage{url}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{bm, amssymb}
+\usepackage{subfigure}
+\renewcommand*{\thesection}{Problem~\arabic{section}:}
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+\input{mlbp17_macros}
+
+\title{CS-E3210- Machine Learning Basic Principles \\ Home Assignment 3 - ``Classification''}
+\begin{document}
+\date{}
+\maketitle
+
+Your solutions to the following problems should be submitted as one single pdf which does not contain 
+any personal information (student ID or name).  The only rule for the layout of your submission is that for each 
+problem there has to be exactly one separate page containing the answer to the problem. You are welcome to use the \LaTeX-file underlying this pdf, 
+available under \url{https://version.aalto.fi/gitlab/junga1/MLBP2017Public}, and fill in your solutions there. 
+
+\newpage
+
+\section{Logistic Regression - I}
+Consider a binary classification problem where the goal is classify or label a webcam snapshot into ``winter'' ($y=-1$) or ``summer'' ($y=1$) based on the feature vector 
+$\vx=(x_{\rm g},1)^{T} \in \mathbb{R}^{2}$ with the image greenness $x_{\rm g}$. A particular classification 
+method is logistic regression, where we classify a datapoint as $\hat{y}=1$ if $h^{(\vw)}(\vx)=\sigma(\vw^T\vx) > 1/2$ and $\hat{y}=-1$ otherwise. Here, we used the sigmoid function 
+$\sigma(z) = 1/(1+\exp(-z))$. 
+
+The predictor value $h^{(\vw)}(\vx)$ is interpreted as the probability of $y=1$ given the knowledge of the feature vector $\vx$, i.e., $P(y=1|\vx;\vw) = h^{(\vw)}(\vx)$. Note that 
+the conditional probability $P(y=1|\vx;\vw)$ is parametrized by the weight vector $\mathbf{w}$.
+We have only $N=2$ labeled data points with features $\vx^{(1)}, \vx^{(2)}$ and labels $y^{(1)}=1, y^{(2)}=-1$ at our disposal in order to find a good choice for $\vw$. 
+Let $\vw_{\rm ML}$ be a vector which satisfies 
+\vspace*{-3mm}
+\begin{equation} 
+P(y\!=\!1|\vx^{(1)};\vw_{\rm ML}) P(y\!=\!-1|\vx^{(2)};\vw_{\rm ML}) = \max_{\vw \in \mathbb{R}^{2}} P(y\!=\!1|\vx^{(1)};\vw) P(y\!=\!-1|\vx^{(2)};\vw). \nonumber
+\vspace*{-3mm}
+\end{equation} 
+Show that the vector $\vw_{\rm ML}$ solves the empirical risk minimization problem using logistic loss $L((\vx,y); \vw) = \ln\big(1 + \exp\big(- y (\vw^{T} \vx)\big))\big)$, i.e., $\vw_{\rm ML}$ is 
+a solution to 
+\vspace*{-2mm}
+$$\min\limits_{\vw \in \mathbb{R}^{2}} (1/\samplesize) \sum_{\sampleidx=1}^{\samplesize} L((\vx^{(\sampleidx)},y^{(\sampleidx)}); \vw).$$
+
+ 
+\noindent {\bf Answer.}
+
+\newpage
+
+\section{Logistic Regression - II}
+Consider a binary classification problem where the goal is classify or label a webcam snapshot into ``winter'' ($y=-1$) or ``summer'' ($y=1$) based on the feature vector 
+$\vx=(x_{\rm g},1)^{T} \in \mathbb{R}^{2}$ with the image greenness $x_{\rm g}$. A particular classification 
+method is logistic regression, where we classify a datapoint as $\hat{y}=1$ if $h^{(\vw)}(\vx)=\sigma(\vw^T\vx) > 1/2$ and $\hat{y}=-1$ otherwise. Here, we used the sigmoid function 
+$\sigma(z) = 1/(1+\exp(-z))$. 
+
+Given some labeled snapshots $\dataset = \left\lbrace (x^{\sampleidx)}, y^{(\sampleidx)}) \right\rbrace_{\sampleidx=1}^{\samplesize}$, we choose the weight vector $\vw$ 
+by empirical risk minimization using logistic loss $L((\vx,y); \vw) = \ln\big(1\!+\!\exp\big(- y (\vw^{T} \vx)\big)\big)$, i.e., 
+\begin{equation}
+\vw_{\rm opt} = \arg \min\limits_{\vw \in \mathbb{R}^{2}} \underbrace{(1/\samplesize) \sum_{\sampleidx=1}^{\samplesize} L((\vx^{(\sampleidx)},y^{(\sampleidx)}); \vw)}_{=f(\mathbf{w})}.
+\end{equation} 
+Since there is no simple closed-form expression for $\vw_{\rm opt}$, we have to use some optimization method for (approximately) finding $\vw_{\rm opt}$. One extremely useful such 
+method is gradient descent which starts with some initial guess $\vw^{(0)}$ and iterates 
+\begin{equation}
+\vw^{(k+1)} = \vw^{(k)} - \alpha \nabla f(\mathbf{w}^{(k)}), 
+\end{equation}
+for $k=0,1,\ldots$. For a suitably chosen step-size $\alpha >0$ one can show that $\lim_{k \rightarrow \infty} \vw^{(k)} = \vw_{\rm opt}$. Can you find a simple closed-form expression 
+for the gradient $\nabla f(\mathbf{w}^{(k)})$ in terms of the current iterate $\vw^{(k)}$ and the data points $\dataset = \left\lbrace (x^{(\sampleidx)}, y^{(\sampleidx)}) \right\rbrace_{\sampleidx=1}^{\samplesize}$.  
+
+ 
+\noindent {\bf Answer.}
+
+% ANSWER 2 HERE!
+\centering
+$\bigtriangledown f(\textbf{w}^{(k)})$ is a derivation of $f(\textbf{w}^{(k)})$\vspace{5mm}
+
+$\bigtriangledown f(\textbf{w}^{(k)}) = \frac{df}{dw}\frac{1}{N}\sum\limits^N_{i=1}L((x^{(i)},y^{(i)}; w^{(k)}$\vspace{5mm}
+
+$= \frac{df}{dw}\frac{1}{N}\sum\limits^N_{i=1}ln(1+exp(-y(i)(w^{(k)T}x^{(i)})))$\vspace{5mm}
+
+A matrix expression is applied on X and Y.\vspace{5mm}
+
+$\bigtriangledown f(\textbf{w}^{(k)}) =\frac{df}{dw}\frac{1}{N}ln(1+exp(- Y (w^T X))$\vspace{5mm}
+
+$=\frac{1}{N} \frac{\frac{df}{dw}(1+exp(- Y (w^T X))}{1+exp(- Y (w^T X)}$\vspace{5mm}
+
+$=\frac{1}{N} \frac{-YX \cdot exp(- Y (w^T X))}{1+exp(- Y (w^T X)}$\vspace{5mm}
+
+$=\frac{-YX}{N(exp(Y (w^T X)+1)}$\vspace{5mm}
+
+$=-\frac{YX}{N \cdot exp(Y (w^T X)+N}$\vspace{5mm}
+
+% ANSWER 2 END!
+\flushleft
+\newpage
+
+\section{Bayes' Classifier - I}
+Consider a binary classification problem where the goal is classify or label a webcam snapshot into ``winter'' ($y=-1$) or ``summer'' ($y=1$) based on the feature vector 
+$\vx=(x_{\rm g},x_{\rm r})^{T} \in \mathbb{R}^{2}$ with the image greenness $x_{\rm g}$ and redness $x_{\rm r}$. We might interpret 
+the feature vector and label as (realizations) of random variables, whose statistics is specified by a joint distribution $p(\vx,y)$. This joint distribution factors as $p(\vx,y) = p(\vx| y) p(y)$ 
+with the conditional distribution $p(\vx| y)$ of the feature vector given the true label $y$ and the prior distribution $p(y)$ of the label values. The prior probability $p(y=1)$ is the fraction of overall 
+summer snapshots. Assume that we know the distributions $p(\vx| y)$ and $p(y)$ and we want to construct a classifier $h(\vx)$, which classifies a snapshot with feature vector $\vx$ as $\hat{y}=h(\vx) \in \{-1,1\}$. 
+Which classifier map $h(\cdot): \vx \mapsto \hat{y}=h(\vx)$, mapping the feature vector $\vx$ to a predicted label $\hat{y}$, yields the smallest error probability (which is $p( y \!\neq\! h(\vx))$)? 
+ 
+\noindent {\bf Answer.}
+
+% ANSWER 3 HERE!
+
+% ANSWER 3 END!
+
+\newpage
+
+\section{Bayes' Classifier - II}
+Reconsider the binary classification problem of Problem 3, where the goal is classify or label a webcam snapshot into ``winter'' ($y=-1$) or ``summer'' ($y=1$) based on the feature vector 
+$\vx=(x_{\rm g},x_{\rm r})^{T} \in \mathbb{R}^{2}$ with the image greenness $x_{\rm g}$ and redness $x_{\rm r}$. While in Problem 3 we assumed perfect knowledge 
+of the joint distribution $p(\vx,y)$ of features $\vx$ and label $y$ (which are modelled as random variables), now we consider only knowledge of the prior probability $P(y=1)$, which we denote $P_{1}$. 
+A useful ``guess'' for the distribution of the features $\vx$, given the label $y$, is via a Gaussian distribution. Thus, we assume 
+\begin{equation}
+p(\vx|y=1;\mathbf{m}_{s},\mathbf{C}_{s}) = \frac{1}{\sqrt{\det\{ 2 \pi \mathbf{C}_{s} \}}} \exp(-(1/2) (\vx\!-\!\vm_{s})^{T} \mathbf{C}_{s}^{-1} (\vx\!-\!\vm_{s})) \nonumber
+\end{equation}
+and, similarly, 
+\begin{equation}
+p(\vx|y=-1;\mathbf{m}_{w},\mathbf{C}_{w}) = \frac{1}{\sqrt{\det\{ 2 \pi \mathbf{C}_{w} \}}} \exp(-(1/2) (\vx\!-\!\vm_{w})^{T} \mathbf{C}_{w}^{-1} (\vx\!-\!\vm_{w})).  \nonumber
+\end{equation} 
+How would you choose (fit) the parameters $\mathbf{m}_{s},\mathbf{m}_{w} \in \mathbb{R}^{2}$ and $\mathbf{C}_{s},\mathbf{C}_{w} \in \mathbb{R}^{2 \times 2}$ 
+for (to) a given labeled dataset $\dataset = \{ (\vx^{(\sampleidx)},y^{(\sampleidx)}) \}_{\sampleidx=1}^{\samplesize}$.  
+
+\noindent {\bf Answer.}
+
+% ANSWER 4 HERE!
+
+Not much to read here, sorry. I hope you did well on your assignment! :)
+
+% ANSWER 4 END!
+
+\newpage
+\section{Support Vector Classifier}
+Consider data points with features $\vx^{(\sampleidx)} \in \mathbb{R}^{2}$ and labels $y^{(\sampleidx)} \in \{-1,1\}$. 
+In the figures below, the data points with $y^{(\sampleidx)}=1$ are depicted as red crosses 
+and the data points with  $y^{(\sampleidx)}=-1$ are depicted as blue filled circles. 
+Which of the four figures depicts a decision boundary which could have been generated by a SVC. Justify your selection.
+	
+	\begin{figure}[ht!]
+		\begin{center}
+			\subfigure[]{%
+				\includegraphics[width=0.2\textwidth]{SVM_1.PNG}
+			}%
+			\subfigure[]{%
+				\includegraphics[width=0.2\textwidth]{SVM_2.PNG}
+			}
+			\subfigure[]{%
+				\includegraphics[width=0.2\textwidth]{SVM_3.PNG}
+			}%
+			\subfigure[]{%
+				\includegraphics[width=0.2\textwidth]{SVM_4.PNG}
+			}
+		\end{center}
+	\end{figure}
+\noindent {\bf Answer.}
+
+% ANSWER 5 HERE!
+\flushleft
+Wikipedia summarises it pretty well (Linear SVM):
+
+"If the training data are linearly separable, we can select two parallel hyperplanes that separate the two classes of data, so that the distance between them is as large as possible."\newline
+
+Based on the above, picture (c) seems the most likely - (d) is non-linear and the margin between the data is not maximized in (a) or (b).
+% ANSWER 5 END!
+
+\end{document}
