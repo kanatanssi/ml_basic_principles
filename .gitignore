@@ -7,6 +7,7 @@ Webcam
 
 # This is likely something that came with the assignment
 *.jpg
+*.jpeg
 *.csv
 *.zip
 *.pdf
