@@ -18,8 +18,10 @@ import matplotlib.pyplot as plt
 import plot_barchart
 # the neural network itself
 from sklearn.neural_network import MLPClassifier as mpl
+# Neural networks are sensitive to feature scaling, so we'll preprocess the data a bit more I guess
+from sklearn.preprocessing import StandardScaler as sclr
 # Reporting tools included in sklearn
-from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import classification_report as cr,confusion_matrix as cm
 
 # Firstly let's define some vars
 # Starting with paths, just for the sake of convenience and readability
@@ -68,10 +70,28 @@ def readCSV(data_path):
 #    return data_content, data_labels
     return data_content
 
-# Main
+################################## Main ##################################
+
+# Read data into memory
 training_data = readCSV(train_data_path)
 training_labels = readCSV(train_label_path)
 test_data = readCSV(test_data_path)
+
+# Scale the data
+scaler = sclr()
+# Fit only to training
+scaler.fit(X_train)
+
+# Create the classifier, first one will have 10 layers
+# Second 10, 10
+# Third 10, 10, 10
+# Fourth 100
+# Fifth 100, 100
+# Sixth 100, 100, 100
+# Seventh 1000
+# Eight 1000, 1000
+# Ninth 1000, 1000, 1000
+classifier = mpl((10))
 
 #label_count = {}
 # Plot the labels of the training data, this part can be removed later
