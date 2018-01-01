@@ -112,7 +112,7 @@ def plot_confusion_matrix(cm, classes,
 ################################## Main ##################################
 
 # This is how many layers (and perceptrons per layer) we'll have
-N = (1000,1000,1000)
+N = (100)
 
 # Read data into memory
 training_data = readCSV(train_data_path)
@@ -123,7 +123,7 @@ test_data = readCSV(test_data_path)
 scaler = sclr()
 # Fit only to training
 scaler.fit(training_data)
-'''
+
 # Create the classifier, first one will have 10 layers
 # Second 10, 10
 # Third 10, 10, 10
@@ -142,14 +142,14 @@ classifier.fit(training_data, training_labels)
 
 predictions = classifier.predict(test_data)
 
-
+#Sample_id,Sample_label
 linecounter = 1
 # Write predictions to a .csv
-writer = csv.writer(open("solution_accuracy.csv", "wb"))
+writer = csv.writer(open("solution_accuracy_"+str(N)+".csv", "wb"))
 for i in list(predictions):
     writer.writerow([linecounter,int(i)])
     linecounter += 1
-
+'''
 # 1st line: Sample_id,Class_1,Class_2,Class_3,Class_4,Class_5,Class_6,Class_7,Class_8,Class_9,Class_10
 # Then do the logloss
 writer2 = csv.writer(open("solution_logloss.csv", "wb"))
@@ -165,18 +165,22 @@ for row in proba:
     linecounter += 1
     #if linecounter > 10:
     #    break
-'''
+'''    
+
 #np.savetxt('solution.csv', ([ int(x) for x in predictions ]), delimiter=',')
+
+#Enable bar chart here!
+'''
 
 # Plot bar chart
 
-#label_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
-## Plot the labels of the training data, this part can be removed later
-#for i in list(predictions):
-#    label_count[int(i)] = label_count[int(i)] + 1
+label_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
+# Plot the labels of the training data, this part can be removed later
+for i in list(predictions):
+    label_count[int(i)] = label_count[int(i)] + 1
 #print label_count
 #print list(label_count.values())
-#plot_barchart.plot_bar(list(label_count.values()),"Training")
+plot_barchart.plot_bar(list(label_count.values()), "N = "+str(N)+", test")
 
 # Produce confusion matrix
 # Split the training set, that's how we'll get both y_true and y_pred
@@ -184,9 +188,12 @@ for row in proba:
 #y_true = training_labels[0:len(training_data)/2]
 #x_the_rest = training_data[len(training_data)/2:len(training_data)]
 #y_the_rest = training_labels[len(training_labels)/2:len(training_labels)]
+''' #Enable bar chart
 
+
+'''
 # Split the data into a training set and a test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(training_data, training_labels, random_state=0)
 
 #print y_the_rest
 
@@ -194,3 +201,20 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 classifier2 = mpl(N, max_iter=500)
 classifier2.fit(X_train, y_train)
 y_pred = classifier2.predict(X_test)
+
+# Compute confusion matrix
+cnf_matrix = cm(y_test, y_pred)
+np.set_printoptions(precision=2)
+
+# Plot non-normalized confusion matrix
+#plt.figure()
+#plot_confusion_matrix(cnf_matrix, classes=class_names,
+#                      title='Confusion matrix, without normalization')
+
+# Plot normalized confusion matrix
+plt.figure()
+plot_confusion_matrix(cnf_matrix, classes=labels, normalize=True,
+                      title='Normalized confusion matrix')
+
+plt.show()
+'''
