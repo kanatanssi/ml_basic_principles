@@ -11,6 +11,15 @@ Function h(x) guesstimates whether a given song, or set of features x, is genre 
 8 'Country'
 9 'Reggae'
 10 'Blues'
+
+There are several commented out blocks here,
+- one produces bar charts with predicted labels
+- one produces and plots a confusion matrix
+
+You can adjust the amount of layers and the amount of nodes in them
+by adjusting the variable N, which you can find in the begigning of main
+(to find main just go Ctrl + F "# Main #" )
+
 """
 import itertools
 import os
